@@ -1,0 +1,8 @@
+paquetes:
+monodevelop
+monodoc-browser
+---
+monodevelop-nunit
+monodevelop-versioncontrol
+monodoc-gtk2.0-manual
+monodoc-nunit-manual
