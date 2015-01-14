@@ -181,3 +181,11 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+# luis velasco 20150114 para excluir los backups de gedit
+*~
+
+# luis velasco 20150114 excluir por monodevelop
+*.userprefs
+
+
