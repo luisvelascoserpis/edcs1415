@@ -16,6 +16,12 @@
         <property name="StockId">gtk-open</property>
         <signal name="Activated" handler="OnOpenActionActivated" />
       </action>
+      <action id="saveAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes" />
+        <property name="StockId">gtk-save</property>
+        <signal name="Activated" handler="OnSaveActionActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
@@ -31,6 +37,7 @@
             <property name="ShowArrow">False</property>
             <node name="__gtksharp_121_Stetic_Editor_ActionToolbar" type="Toolbar">
               <node type="Toolitem" action="openAction" />
+              <node type="Toolitem" action="saveAction" />
             </node>
           </widget>
           <packing>
