@@ -5,6 +5,7 @@ using Gtk;
 public partial class MainWindow: Gtk.Window
 {	
 	private string filename;
+	private string content = "";
 
 	public MainWindow (): base (Gtk.WindowType.Toplevel)
 	{
@@ -19,8 +20,30 @@ public partial class MainWindow: Gtk.Window
 		a.RetVal = true;
 	}
 
+	/// <summary>
+	/// confirm() devuelve true si el usuario confirma que descarta los cambios
+	/// </summary>
+	private bool confirm() {
+		MessageDialog messageDialog = new MessageDialog (
+			this,
+			DialogFlags.DestroyWithParent,
+			MessageType.Question,
+			ButtonsType.YesNo,
+			"Hay cambios sin guardar. ¿Quieres descartar los cambios?");
+		ResponseType responseType = (ResponseType)messageDialog.Run ();
+		messageDialog.Destroy ();
+		return responseType == ResponseType.Yes; //true o false
+	}
+
+	private bool hasChanges() {
+		return !content.Equals (textView.Buffer.Text);
+	}
+
 	protected void OnOpenActionActivated (object sender, EventArgs e)
 	{
+		if (hasChanges() && !confirm ())
+			return;
+
 		FileChooserDialog fileChooserDialog = new FileChooserDialog (
 			"Elige el archivo",
 			this,
@@ -30,7 +53,9 @@ public partial class MainWindow: Gtk.Window
 		//if (fileChooserDialog.Run () == (int)ResponseType.Ok)
 		if ((ResponseType)fileChooserDialog.Run () == ResponseType.Ok) {
 			filename = fileChooserDialog.Filename;
-			textView.Buffer.Text = File.ReadAllText (filename);
+			content = File.ReadAllText (filename);
+			textView.Buffer.Text = content;
+
 		}
 
 		fileChooserDialog.Destroy ();
@@ -38,7 +63,7 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnSaveActionActivated (object sender, EventArgs e)
 	{
-		if (filename != null)
+		if (filename != null) 
 			File.WriteAllText (filename, textView.Buffer.Text);
 		else
 			saveAs ();
@@ -58,5 +83,20 @@ public partial class MainWindow: Gtk.Window
 		}
 
 		fileChooserDialog.Destroy ();
+	}
+
+	protected void OnSaveAsActionActivated (object sender, EventArgs e)
+	{
+		saveAs();
+	}
+
+	protected void OnNewActionActivated (object sender, EventArgs e)
+	{
+		if (hasChanges() && !confirm ())
+			return;
+
+		textView.Buffer.Text = "";
+		content = "";
+		filename = null;
 	}
 }
