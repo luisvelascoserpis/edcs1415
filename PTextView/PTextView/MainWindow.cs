@@ -55,7 +55,6 @@ public partial class MainWindow: Gtk.Window
 			filename = fileChooserDialog.Filename;
 			content = File.ReadAllText (filename);
 			textView.Buffer.Text = content;
-
 		}
 
 		fileChooserDialog.Destroy ();
@@ -63,9 +62,10 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnSaveActionActivated (object sender, EventArgs e)
 	{
-		if (filename != null) 
-			File.WriteAllText (filename, textView.Buffer.Text);
-		else
+		if (filename != null) {
+			content = textView.Buffer.Text;
+			File.WriteAllText (filename, content);
+		} else
 			saveAs ();
 
 	}
@@ -79,7 +79,8 @@ public partial class MainWindow: Gtk.Window
 			Stock.Save, ResponseType.Ok);
 		if ((ResponseType)fileChooserDialog.Run () == ResponseType.Ok) {
 			filename = fileChooserDialog.Filename;
-			File.WriteAllText (filename, textView.Buffer.Text);
+			content = textView.Buffer.Text;
+			File.WriteAllText (filename, content);
 		}
 
 		fileChooserDialog.Destroy ();
